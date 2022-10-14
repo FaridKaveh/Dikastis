@@ -23,20 +23,17 @@ class Agent:
         return np.average(self.comp_arr, weights = self.comp_dens_arr)
     
     def play_game(self, evals) -> int:
+
+        """Picks a move according to its evaluation from 'evals' with skill 'apparent_comp'."""
+
+        apparent_comp = np.random.choice(self.comp_arr, size = 1, p = self.comp_dens_arr )
         
         return NotImplementedError
     def update_dens(self, evals, choice) -> None:
         """Updates self.comp_dens_arr according to an observation evals[choice]."""
-        m = self.comp_dens_arr.shape[0]; n = evals.shape[0] 
         v_max = np.max(evals) 
         K = 0.01 
         cond_prob_arr = (v_max - evals[choice] + K)**(-self.comp_arr) 
         self.comp_dens_arr = (self.comp_dens_arr*cond_prob_arr)/np.sum(cond_prob_arr * self.comp_dens_arr) 
 
-        # likelihood_base = (v_max - evals + K)
-        # prob_arr = np.zeros((m,n))
-        
-        # for i in range(m): 
-        #     prob_arr[i] = likelihood_base**(-self.comp_arr[i])
-        #     prob_arr[i] = prob_arr[i]/np.sum(prob_arr[i])
         
