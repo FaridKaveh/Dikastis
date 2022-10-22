@@ -12,8 +12,7 @@ class Agent:
         self.epsilon = epsilon
         self.min_comp = min_comp; self.max_comp = max_comp; 
         self.intval_length = self.max_comp - self.min_comp
-        self.comp_arr = np.arange(self.min_comp,
-            self.max_comp + self.epsilon, self.epsilon )
+        self.comp_arr = np.arange(self.min_comp, self.max_comp + self.epsilon, self.epsilon )
         self.comp_dens_arr = (1/np.shape(self.comp_arr)[0]) * np.ones(np.shape(self.comp_arr)[0])
 
         
