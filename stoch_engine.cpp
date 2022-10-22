@@ -6,15 +6,29 @@
 #include <math.h> 
 
 Agent::update_range(int no_data_points){ 
+	/*Part of the dynamic range implementation. Gets rid of the tail ends of competence range if the tail probability is
+	 * very small. Iterating forward, checks if the entries of comp_dens_arr are very small (10E-6 or smaller) and 
+	 * erases them of they are. If a certain element reached  has values above this, then we are no longer in the 'tail',
+	 * so stops removing elements. Does the same procedure iterating in reverse. */
 	int n = comp_dens_arr.size(); 
 	if (no_data_points > 10) {
-       		for (int i = 0; i < n; i++){ 
-			if (comp_dens_arr[i] <= std::pow(10, -5)*1/(double)n) { 
-				comp_dens_arr[i] 
+		std::vector<double>::iterator dens_it = comp_dens_arr.begin(); 
+		std::vector<double>::iterator comp_it = comp_arr.begin(); 	
+       		while (dens_it != comp_dens_arr.end()){ 
+			if (*dens_it <= std::pow(10, -5)*1/(double)n) { 
+				dens_it = comp_dens_arr(dens_it);
+				comp_it = comp_arr(comp_it); 
 			} 
 			break; 
 		}
-		for (std::vector<double>::iterator it = dens_arr.end(), it != dens_arr.begin(), it--){ 
+		std::vector<double>::reverse_iterator dens_rit = comp_dens_arr.rbegin();
+	        std::vector<double>::reverse_iterator comp_rit = comp_arr.rbegin();	
+		while (dens_rit != comp_dens_arr.rend()) {
+			if (*dens_rit <= std::pow(10, -5) * 1/(double)n) {
+			        // erase method does not take reverse_iterators, hence this workaround. 
+				dens_rit = decltype(dens_rit)(comp_dens_arr.erase((dens_rit+1).base());
+				comp_rit = decltype(comp_rit)(comp_arr.erase((comp_rit +1).base());
+			}
 		}	
 	}	
 }
