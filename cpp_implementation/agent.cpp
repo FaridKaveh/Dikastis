@@ -4,8 +4,9 @@
 #include "agent.h"
 #include <functional>
 #include <math.h> 
+#include <random> 
 
-Agent::update_range(int no_data_points){ 
+void Agent::update_range(int no_data_points){ 
 	/*Part of the dynamic range implementation. Gets rid of the tail ends of competence range if the tail probability is
 	 * very small. Iterating forward, checks if the entries of comp_dens_arr are very small (10E-6 or smaller) and 
 	 * erases them of they are. If a certain element reached  has values above this, then we are no longer in the 'tail',
@@ -15,20 +16,22 @@ Agent::update_range(int no_data_points){
 		std::vector<double>::iterator dens_it = comp_dens_arr.begin(); 
 		std::vector<double>::iterator comp_it = comp_arr.begin(); 	
        		while (dens_it != comp_dens_arr.end()){ 
-			if (*dens_it <= std::pow(10, -5)*1/(double)n) { 
-				dens_it = comp_dens_arr(dens_it);
-				comp_it = comp_arr(comp_it); 
+			if (*dens_it <= std::pow(10, -6)*1/(double)n) { 
+				dens_it = comp_dens_arr.erase(dens_it);
+				comp_it = comp_arr.erase(comp_it); 
 			} 
-			break; 
+			else break; 
 		}
 		std::vector<double>::reverse_iterator dens_rit = comp_dens_arr.rbegin();
 	        std::vector<double>::reverse_iterator comp_rit = comp_arr.rbegin();	
 		while (dens_rit != comp_dens_arr.rend()) {
 			if (*dens_rit <= std::pow(10, -5) * 1/(double)n) {
 			        // erase method does not take reverse_iterators, hence this workaround. 
-				dens_rit = decltype(dens_rit)(comp_dens_arr.erase((dens_rit+1).base());
-				comp_rit = decltype(comp_rit)(comp_arr.erase((comp_rit +1).base());
+				dens_rit = decltype(dens_rit)(comp_dens_arr.erase((dens_rit+1).base()));
+				comp_rit = decltype(comp_rit)(comp_arr.erase((comp_rit +1).base()));
 			}
+
+			else break; 
 		}	
 	}	
 }
@@ -37,7 +40,7 @@ Agent::Agent(){
 	// default constructor for agent. Sets the competence range to [-3,3]
 	delta = 0.1; 
 	epsilon = delta;
-	max_comp = 3; min_comp = -3; 
+	max_comp = 5; min_comp = -5; 
 	double intervals = (max_comp-min_comp)/epsilon;	
 	for (int i = 0; i < intervals+1; i++) comp_arr.push_back(min_comp+i*epsilon); 
 			
@@ -71,17 +74,4 @@ void Agent::update_dens(std::vector<double> evals, int choice){
 	}	
 	std::transform(comp_dens_arr.begin(), comp_dens_arr.end(), comp_dens_arr.begin(), std::bind(std::multiplies<double>(), std::placeholders::_1, 1/normalisation));
 } 
-
-int main() { 
-	Agent player1;
-	player1.get_params(); std::cout << std::endl;
-       	std::vector<double> evals = {-1.2, 1.0, 3.7, -2}; 
-	int choice = 2; 
-	double skill = player1.get_skill(); 
-	player1.update_dens(evals, choice); 	
-	double skill1 = player1.get_skill();
-	std::vector<double> dens_arr = player1.get_dens_arr(); 
-	std::cout << skill << "; " << skill1 << std::endl;
-	std::cout << dens_arr[0] << "; " << dens_arr[50] << std::endl;
-	return 0; 
-} 
+ 
