@@ -14,6 +14,7 @@ class Agent {
 		void get_params(){printf("delta: %f, epsilon: %f, comp range: [%f, %f]", delta, epsilon, min_comp,max_comp); }	
 		void update_dens(std::vector<double> evals, int choice); 	
 		std::vector<double> get_dens_arr() { return comp_dens_arr;}
+		std::vector<double> get_comp_arr() {return comp_arr;}
 		void update_range(int no_data_points); 
 };
 
