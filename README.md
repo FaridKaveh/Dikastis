@@ -4,4 +4,12 @@ Diskastis (from greek meaning 'Judge')  is a project to rate chess players based
 
 The engine used for evaluation is Stockfish 15 NNUE. Dikastis' rating system is absolute, unlike the ELO rating system, which is relative. It is also transferrable to games other than chess, as it does not use any chess specific information.
 
+To compile Dikastis you only need the ```cpp_implementation``` folder. To compile, make sure you have the g++ compiler installed (you can check using the command ```g++ --version```). Then navigate to the ```cpp_implementation``` folder andtype the following in Terminal (Linux/MacOS) 
+
+``` 
+g++ main.cpp agent.cpp -o <FILE_NAME>
+
+```
+
+replacing ```<FILE_NAME>``` with whatever you want to call the output executable.    
 ### 
