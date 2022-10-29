@@ -6,6 +6,9 @@
 #include <math.h> 
 #include <random> 
 
+void set_comp_arrays() { 
+	
+}
 void Agent::update_range(int no_data_points){ 
 	/*Part of the dynamic range implementation. Gets rid of the tail ends of competence range if the tail probability is
 	 * very small. Iterating forward, checks if the entries of comp_dens_arr are very small (10E-6 or smaller) and 
@@ -32,7 +35,15 @@ void Agent::update_range(int no_data_points){
 			}
 
 			else break; 
-		}	
+	
+		}
+		
+		//renormalising the density arr
+		double renormalise; 
+		for (auto& elem: comp_dens_arr) renormalise += elem;
+		std::transform(comp_dens_arr.begin(), comp_dens_arr.end(), comp_dens_arr.begin(), std::bind(std::multiplies<double>(), std::placeholders::_1, 1/renormalise));
+ 	
+		
 	}	
 }
 

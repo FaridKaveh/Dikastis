@@ -17,6 +17,8 @@ class Agent {
 		std::vector<double> get_dens_arr() { return comp_dens_arr;}
 		std::vector<double> get_comp_arr() {return comp_arr;}
 		void update_range(int no_data_points); 
+		void set_minmax(double min, double max) {min_comp = min; max_comp = max;}
+		void set_comp_arrays(); 
 };
 
 #endif
