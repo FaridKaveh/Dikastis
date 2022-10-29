@@ -1,4 +1,5 @@
-#pragma once 
+#ifndef AGENT_H 
+#define AGENT_H
 #include <vector> 
 
 class Agent { 
@@ -18,3 +19,4 @@ class Agent {
 		void update_range(int no_data_points); 
 };
 
+#endif
