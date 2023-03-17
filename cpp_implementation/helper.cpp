@@ -1,4 +1,8 @@
 #include <vector> 
+#include <stdio.h>
+#include <unistd.h> 
+#include <fstream> 
+#include "helper.h"
 
 /* A file for helper function implmentation.*/
 
@@ -6,6 +10,7 @@ std::vector<double>
 populate_vector(double start, double inc, int n){ 
 
     /* Returns a vector v populated by {start - inc, start - 2* inc, ... , start - n*inc}*/
+
 	std::vector<double> v; 
 	v.reserve(n-1);	
 	for (int i = 1; i < n; i++){ 

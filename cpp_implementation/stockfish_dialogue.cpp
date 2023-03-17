@@ -2,8 +2,10 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <stdio.h>
-#include <unistd.h>
+#include <unistd.h> 
 #include <fstream> 
+#include "helper.h"
+#include "stockfish_dialogue.h"
 
 
 
@@ -12,7 +14,7 @@ their dialogue by sending commands from dikastis and receiving responses from st
 
 
 
-void sf_dialogue(const char* file) { 
+int sf_dialogue(const char* file) { 
     //arg array for execvp
     //sf_commands.sh is the bash script of to be run by child process
     const char* argv[] = {"./sf_commands.sh", NULL};
@@ -63,7 +65,7 @@ void sf_dialogue(const char* file) {
             }
 
             else {printf("execvp error\n");}
-            
+            //read_from_file declared and implemented in helper.cpp
             read_from_file(child_write_pipe[0]);
             std::cout << "-------------------------------------------" << std::endl;
 
@@ -85,4 +87,5 @@ void sf_dialogue(const char* file) {
     }
     
     fenfile.close();
+    return EXIT_SUCCESS;
 }

@@ -1,18 +1,22 @@
 #ifndef AGENT_H 
 #define AGENT_H
 #include <vector> 
+#include <cstdio>
 
 class Agent { 
 	private: 
 		double delta, epsilon; 
 		double min_comp, max_comp;
-	       	std::vector<double> comp_arr; 
+	    std::vector<double> comp_arr; 
 		std::vector<double> comp_dens_arr;
 	
 	public: 
-		Agent(); //default constructor defined in implementation
+		//default constructor defined in implementation
+		Agent(); 
+		//alternative constructor 
+		Agent(double epsilon, double delta, double max_comp, double min_comp); 
 		double get_skill(); 	
-		void get_params(){printf("delta: %f, epsilon: %f, comp range: [%f, %f]", delta, epsilon, min_comp,max_comp); }	
+		void get_params(){printf("delta: %f, epsilon: %f, comp range: [%f, %f]\n", delta, epsilon, min_comp,max_comp); }	
 		void update_dens(std::vector<double> evals, int choice); 	
 		std::vector<double> get_dens_arr() { return comp_dens_arr;}
 		std::vector<double> get_comp_arr() {return comp_arr;}

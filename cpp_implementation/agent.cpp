@@ -2,17 +2,47 @@
 #include <vector> 
 #include <algorithm> 
 #include "agent.h"
-#include "helper.cpp"
+#include "helper.h"
 #include <functional>
 #include <math.h> 
 #include <random> 
 
 
+
+
+Agent::Agent(){ 
+	// default constructor for agent. Sets the competence range to [-5,5]
+	delta = 0.1; 
+	epsilon = delta;
+	max_comp = 10; min_comp = -max_comp; 
+	double intervals = (max_comp-min_comp)/epsilon;	
+	for (int i = 0; i < intervals+1; i++) comp_arr.push_back(min_comp+i*epsilon); 
+			
+
+	comp_dens_arr.assign(comp_arr.size(), 1/(double)comp_arr.size()); 
+}
+
+Agent::Agent(double epsilon, double delta, double max_comp, double min_comp){ 
+	this -> delta = delta; 
+	this -> epsilon = epsilon; 
+	this -> max_comp = max_comp; 
+	this -> min_comp = min_comp; 
+
+	double intervals = (max_comp-min_comp)/epsilon;	
+	for (int i = 0; i < intervals+1; i++) comp_arr.push_back(min_comp+i*epsilon); 
+			
+
+	comp_dens_arr.assign(comp_arr.size(), 1/(double)comp_arr.size()); 
+}
+
 void Agent::update_range(int no_data_points){ 
+
 	/*Part of the dynamic range implementation. Gets rid of the tail ends of competence range if the tail probability is
 	 * very small. Iterating forward, checks if the entries of comp_dens_arr are very small (10E-6 or smaller) and 
 	 * erases them of they are. If a certain element reached  has values above this, then we are no longer in the 'tail',
 	 * so stops removing elements. Does the same procedure iterating in reverse. */
+
+	 
 	int n = comp_dens_arr.size(); 
 	if (no_data_points > 10) {
 		std::vector<double>::iterator dens_it = comp_dens_arr.begin(); 
@@ -76,28 +106,20 @@ void Agent::update_range(int no_data_points){
 	}	
 }
 
-Agent::Agent(){ 
-	// default constructor for agent. Sets the competence range to [-5,5]
-	delta = 0.1; 
-	epsilon = delta;
-	max_comp = 10; min_comp = -max_comp; 
-	double intervals = (max_comp-min_comp)/epsilon;	
-	for (int i = 0; i < intervals+1; i++) comp_arr.push_back(min_comp+i*epsilon); 
-			
 
-	comp_dens_arr.assign(comp_arr.size(), 1/(double)comp_arr.size()); 
-}
-	/*update_dens updates the competence probability density according to the 'choice' made from 'eval'.
-	 It's a simple application of Bayes*/
+
 double Agent::get_skill(){
 	double skill = 0;  
 	for (int i = 0; i < comp_arr.size(); i++) skill += comp_arr[i]*comp_dens_arr[i]; 
        return skill;	
 }
+
+
+
 void Agent::update_dens(std::vector<double> evals, int choice){ 
 
 	auto  v_max = max_element(evals.begin(), evals.end());
-	double K = sqrt(2.0) - 1.0; std::vector<double> cond_prob_arr;
+	double K = sqrt(2) - 1; std::vector<double> cond_prob_arr;
        	double base = *v_max - evals[choice] + K;	
 	
 	//conditional probability of competence given choice from evals was observed
