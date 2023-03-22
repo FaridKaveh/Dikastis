@@ -76,8 +76,8 @@ int sf_dialogue(const char* file) {
             commfile << interpreter << spawn;
             commfile << "send \"position fen " << fen << " \\n isready \\n\"\n"; 
             commfile << "expect readyok\n";
-            commfile << "send \"go depth 15 \\n \" \n"; 
-            commfile << "expect bestmove \n";
+            commfile << "send \"eval\\n \" \n"; 
+            commfile << "expect Final \n";
             commfile << "send \" isready \\n\"\n";
             commfile << "expect readyok \n";
 
