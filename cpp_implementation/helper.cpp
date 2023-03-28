@@ -34,3 +34,13 @@ read_from_file(int file){
     
 }
 
+void slice_c_str(char* str, char * buffer, size_t start, size_t end){ 
+    size_t pos = 0; 
+
+    for (size_t i = start; i <= end; i++){ 
+        buffer[pos] = str[i]; pos++;
+    }
+
+    buffer[pos] = 0; 
+}
+
