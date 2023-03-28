@@ -13,4 +13,7 @@ read_from_file(int file);
 
 void 
 slice_c_str(char * str, char * buffer, size_t start, size_t end); 
+
+
+double get_eval(int file, const char * expect);
 #endif

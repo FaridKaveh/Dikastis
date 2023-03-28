@@ -1,8 +1,9 @@
 #include <iostream> 
-#include "agent.h" 
-#include "helper.h"
 #include <random> 
 #include <algorithm> 
+#include <fcntl.h>
+#include "agent.h" 
+#include "helper.h"
 #include "stockfish_dialogue.h"
 
 
@@ -18,7 +19,10 @@ auto evaluation {std::bind(one_to_one, re)}; //bind generator and dist for convi
 int main() { 
 	Agent player1(0.1, 0.1, 10.0, -10.0);
 	player1.get_params(); 
-	sf_dialogue("moves.txt");
+	// sf_dialogue("moves.txt"); 
+	int fd =  open ("test.txt", O_RDONLY);
+	const char* hey = "hello";
+	get_eval(fd, hey);
 	
 	return 0; 
 } 

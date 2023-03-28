@@ -1,4 +1,5 @@
 #include <vector> 
+#include <string>
 #include <stdio.h>
 #include <unistd.h> 
 #include <fstream> 
@@ -35,6 +36,16 @@ read_from_file(int file){
 }
 
 void slice_c_str(char* str, char * buffer, size_t start, size_t end){ 
+
+    /* slice a c_string similar to python slicing. 
+    Inputs: 
+    str: pointer to c character array containing string to be sliced
+    buffer: pointer to c char array to put the sliced segment
+    start: starting index of slice
+    end: 
+    
+    
+    */
     size_t pos = 0; 
 
     for (size_t i = start; i <= end; i++){ 
@@ -44,3 +55,26 @@ void slice_c_str(char* str, char * buffer, size_t start, size_t end){
     buffer[pos] = 0; 
 }
 
+double get_eval(int file, const char* expect){ 
+    FILE *stream; 
+    stream = fdopen(file, "r");
+    char strpoint[1000]; 
+    std::string buffer; 
+    std::string test = "Final evaluation";
+    double eval;
+
+    while (fgets(strpoint, 1000, stream) != NULL ){ 
+        std::string str(strpoint); 
+        buffer = str.substr(0, 16); 
+
+        if (buffer == test){ 
+
+            std::size_t eval_pos = str.find('+'); 
+            if (eval_pos == std::string::npos) eval_pos = str.find('-'); 
+            str = str.substr(eval_pos++, 4);
+            std::cout << "eval = " << str << std::endl; 
+
+        }
+    }
+    return 0.0;
+}
